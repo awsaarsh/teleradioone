@@ -1,42 +1,25 @@
-import React, { useState, useEffect } from "react";
+// components/Dashboard/Dashboard.jsx - Fixed React Hooks
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import PatientList from "../PatientList/PatientList";
 import LoadingSpinner from "../Common/LoadingSpinner";
+import DicomImport from "../DicomImport/DicomImport";
 import { patientService } from "../../services/patientService";
-import { Search, Filter, Calendar, User } from "lucide-react";
+import { Search, Filter, Calendar, Upload } from "lucide-react";
 import "./Dashboard.css";
 
 const Dashboard = () => {
   const [patients, setPatients] = useState([]);
-  const [filteredPatients, setFilteredPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [showImportModal, setShowImportModal] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchPatients();
-  }, []);
-
-  useEffect(() => {
-    filterPatients();
-  }, [patients, searchTerm, statusFilter, priorityFilter]);
-
-  const fetchPatients = async () => {
-    try {
-      setLoading(true);
-      const data = await patientService.getAllPatients();
-      setPatients(data);
-    } catch (error) {
-      console.error("Error fetching patients:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterPatients = () => {
+  // Memoized filtered patients to prevent unnecessary recalculations
+  const filteredPatients = useMemo(() => {
     let filtered = patients;
 
     // Search filter
@@ -63,25 +46,105 @@ const Dashboard = () => {
       );
     }
 
-    setFilteredPatients(filtered);
-  };
+    return filtered;
+  }, [patients, searchTerm, statusFilter, priorityFilter]);
 
-  const handlePatientSelect = (patient) => {
-    setSelectedPatient(patient);
-    navigate(`/study/${patient.patientId}`);
-  };
-
-  const getStatusCounts = () => {
-    const counts = {
+  // Memoized status counts to prevent unnecessary recalculations
+  const statusCounts = useMemo(() => {
+    return {
       pending: patients.filter((p) => p.status === "pending").length,
       inProgress: patients.filter((p) => p.status === "in-progress").length,
       completed: patients.filter((p) => p.status === "completed").length,
       urgent: patients.filter((p) => p.priority === "urgent").length,
     };
-    return counts;
-  };
+  }, [patients]);
 
-  const statusCounts = getStatusCounts();
+  // Fetch patients function with useCallback to prevent recreation
+  const fetchPatients = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await patientService.getAllPatients();
+      setPatients(data);
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Handle patient selection with useCallback
+  const handlePatientSelect = useCallback(
+    (patient) => {
+      setSelectedPatient(patient);
+      navigate(`/study/${patient.patientId}`);
+    },
+    [navigate]
+  );
+
+  // Handle import click with useCallback
+  const handleImportClick = useCallback(() => {
+    setShowImportModal(true);
+  }, []);
+
+  // Handle files processed with useCallback
+  const handleFilesProcessed = useCallback((processedFiles) => {
+    console.log("Files processed:", processedFiles);
+
+    // Convert to patient format and add to list
+    const newPatients = processedFiles.map((file) => ({
+      patientId: file.patientId,
+      name: file.patientName,
+      age: file.age,
+      gender: file.gender,
+      studyDate: file.studyDate,
+      modality: file.modality,
+      bodyPart: file.bodyPart,
+      status: file.status,
+      priority: file.priority,
+      accessionNumber: file.accessionNumber,
+      studyDescription: file.studyDescription,
+      seriesCount: 1,
+      imageCount: 1,
+      referringPhysician: file.referringPhysician,
+      series: file.series,
+    }));
+
+    // Add to beginning of patient list
+    setPatients((prev) => [...newPatients, ...prev]);
+    setShowImportModal(false);
+
+    // Show success message
+    alert(
+      `Successfully imported ${newPatients.length} file${
+        newPatients.length !== 1 ? "s" : ""
+      }!`
+    );
+  }, []);
+
+  // Close import modal with useCallback
+  const handleCloseImport = useCallback(() => {
+    setShowImportModal(false);
+  }, []);
+
+  // Search term change handler with useCallback
+  const handleSearchChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  // Status filter change handler with useCallback
+  const handleStatusFilterChange = useCallback((e) => {
+    setStatusFilter(e.target.value);
+  }, []);
+
+  // Priority filter change handler with useCallback
+  const handlePriorityFilterChange = useCallback((e) => {
+    setPriorityFilter(e.target.value);
+  }, []);
+
+  // Fetch patients on component mount
+  useEffect(() => {
+    fetchPatients();
+  }, [fetchPatients]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -122,17 +185,14 @@ const Dashboard = () => {
             type="text"
             placeholder="Search by patient name, ID, or accession number..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
           />
         </div>
 
         <div className="filter-controls">
           <div className="filter-group">
             <Filter size={16} />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
+            <select value={statusFilter} onChange={handleStatusFilterChange}>
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
               <option value="in-progress">In Progress</option>
@@ -144,7 +204,7 @@ const Dashboard = () => {
             <Calendar size={16} />
             <select
               value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
+              onChange={handlePriorityFilterChange}
             >
               <option value="all">All Priority</option>
               <option value="urgent">Urgent</option>
@@ -153,6 +213,11 @@ const Dashboard = () => {
               <option value="low">Low</option>
             </select>
           </div>
+
+          <button className="import-btn" onClick={handleImportClick}>
+            <Upload size={16} />
+            Import Files
+          </button>
         </div>
       </div>
 
@@ -163,6 +228,14 @@ const Dashboard = () => {
           selectedPatient={selectedPatient}
         />
       </div>
+
+      {/* Import Modal */}
+      {showImportModal && (
+        <DicomImport
+          onFileProcessed={handleFilesProcessed}
+          onClose={handleCloseImport}
+        />
+      )}
     </div>
   );
 };

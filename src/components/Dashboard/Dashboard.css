@@ -1,16 +1,26 @@
-/* Dashboard.css */
+/* Fixed Dashboard Filter Alignment - ADD TO Dashboard.css */
+
+/* Dashboard Container */
 .dashboard {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 20px;
   max-width: 1400px;
   margin: 0 auto;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Dashboard Header */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 30px;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .dashboard-title h1 {
@@ -18,17 +28,21 @@
   color: #1a1a1a;
   font-size: 2rem;
   font-weight: 600;
+  font-family: inherit;
 }
 
 .dashboard-title p {
   margin: 0;
   color: #666;
   font-size: 1rem;
+  font-family: inherit;
 }
 
+/* Stats Cards */
 .dashboard-stats {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .stat-card {
@@ -39,6 +53,12 @@
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-left: 4px solid;
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .stat-card.pending {
@@ -62,32 +82,38 @@
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 5px;
+  font-family: inherit;
 }
 
 .stat-label {
   font-size: 0.9rem;
   color: #666;
   font-weight: 500;
+  font-family: inherit;
 }
 
+/* Fixed Filter Section */
 .dashboard-filters {
   background: white;
-  padding: 20px;
+  padding: 20px 24px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   display: flex;
-  gap: 20px;
   align-items: center;
+  gap: 20px;
   flex-wrap: wrap;
+  min-height: 70px; /* Ensure consistent height */
 }
 
+/* Search Bar - Fixed */
 .search-bar {
   flex: 1;
   min-width: 300px;
   position: relative;
   display: flex;
   align-items: center;
+  height: 44px; /* Fixed height */
 }
 
 .search-bar svg {
@@ -95,59 +121,137 @@
   left: 15px;
   color: #666;
   z-index: 1;
+  pointer-events: none;
 }
 
 .search-bar input {
   width: 100%;
-  padding: 12px 12px 12px 45px;
-  border: 1px solid #ddd;
+  height: 100%;
+  padding: 0 15px 0 45px;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-family: inherit;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
+  background: white;
+  box-sizing: border-box;
 }
 
 .search-bar input:focus {
   border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.search-bar input::placeholder {
+  color: #9ca3af;
+}
+
+/* Filter Controls - Fixed Alignment */
 .filter-controls {
   display: flex;
-  gap: 15px;
   align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+  height: 44px; /* Match search bar height */
 }
 
+/* Filter Group - Properly Aligned */
 .filter-group {
   display: flex;
   align-items: center;
   gap: 8px;
+  height: 100%;
+  white-space: nowrap;
 }
 
 .filter-group svg {
-  color: #666;
+  color: #6b7280;
+  flex-shrink: 0;
 }
 
 .filter-group select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
+  height: 44px; /* Match other elements */
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.9rem;
+  font-family: inherit;
   outline: none;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
+  background: white;
+  color: #374151;
+  min-width: 120px;
+  box-sizing: border-box;
 }
 
 .filter-group select:focus {
   border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.filter-group select:hover {
+  border-color: #9ca3af;
+}
+
+/* Import Button - Properly Aligned */
+.import-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px; /* Match other elements */
+  padding: 0 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 140px;
+  box-sizing: border-box;
+}
+
+.import-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.import-btn:active {
+  transform: translateY(0);
+}
+
+.import-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.import-btn svg {
+  flex-shrink: 0;
+}
+
+/* Dashboard Content */
 .dashboard-content {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  flex: 1;
 }
 
+/* Responsive Design - Mobile */
 @media (max-width: 768px) {
   .dashboard {
     padding: 15px;
@@ -156,6 +260,7 @@
   .dashboard-header {
     flex-direction: column;
     align-items: stretch;
+    gap: 15px;
   }
 
   .dashboard-stats {
@@ -165,19 +270,175 @@
   .stat-card {
     flex: 1;
     min-width: 80px;
+    padding: 15px 10px;
   }
 
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+
+  /* Mobile Filter Layout */
   .dashboard-filters {
     flex-direction: column;
     align-items: stretch;
     gap: 15px;
+    padding: 20px;
+    min-height: auto;
   }
 
   .search-bar {
     min-width: unset;
+    width: 100%;
   }
 
   .filter-controls {
+    flex-direction: column;
+    gap: 12px;
+    height: auto;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    height: 44px;
     justify-content: space-between;
+  }
+
+  .filter-group select {
+    flex: 1;
+    margin-left: 8px;
+  }
+
+  .import-btn {
+    width: 100%;
+    justify-content: center;
+    min-width: unset;
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .dashboard-filters {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .search-bar {
+    min-width: 250px;
+  }
+
+  .filter-controls {
+    gap: 12px;
+  }
+
+  .filter-group select {
+    min-width: 100px;
+  }
+
+  .import-btn {
+    min-width: 120px;
+  }
+}
+
+/* Large Screen Optimization */
+@media (min-width: 1200px) {
+  .dashboard-filters {
+    padding: 24px 32px;
+  }
+
+  .search-bar {
+    min-width: 350px;
+  }
+
+  .filter-controls {
+    gap: 20px;
+  }
+
+  .filter-group select {
+    min-width: 130px;
+  }
+
+  .import-btn {
+    min-width: 150px;
+    padding: 0 24px;
+  }
+}
+
+/* Focus Management */
+.filter-group select:focus,
+.search-bar input:focus,
+.import-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Loading State for Import Button */
+.import-btn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.import-btn.loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Accessibility Improvements */
+.filter-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-right: 8px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .dashboard-filters {
+    border: 2px solid #000;
+  }
+
+  .search-bar input,
+  .filter-group select {
+    border: 2px solid #000;
+  }
+
+  .import-btn {
+    border: 2px solid #000;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .import-btn,
+  .stat-card,
+  .search-bar input,
+  .filter-group select {
+    transition: none;
+  }
+
+  .import-btn:hover {
+    transform: none;
+  }
+
+  .stat-card:hover {
+    transform: none;
   }
 }
