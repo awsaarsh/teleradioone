@@ -1,0 +1,230 @@
+/* PatientList.css */
+.patient-list {
+  padding: 20px;
+}
+
+.patient-list-header {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.patient-list-header h2 {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.patient-list-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.patient-list-empty h3 {
+  margin: 0 0 10px 0;
+  color: #1a1a1a;
+}
+
+.patient-list-empty p {
+  margin: 0;
+}
+
+.patient-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+/* Patient Card Styles */
+.patient-card {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.patient-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: translateY(-2px);
+}
+
+.patient-card.selected {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  background: #f8faff;
+}
+
+.patient-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.patient-info .patient-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+}
+
+.patient-info .patient-name svg {
+  color: #666;
+}
+
+.patient-details {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.patient-id {
+  font-weight: 500;
+}
+
+.patient-status {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.status-pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-badge.status-in-progress {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-badge.status-completed {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.priority-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.priority-badge.priority-urgent {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.patient-card-body {
+  margin-bottom: 15px;
+}
+
+.study-info {
+  margin-bottom: 12px;
+}
+
+.study-detail {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.study-detail strong {
+  color: #1f2937;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.study-metrics {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.patient-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.study-date {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.action-hint {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.patient-card:hover .action-hint {
+  color: #3b82f6;
+}
+
+@media (max-width: 768px) {
+  .patient-cards-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .patient-card {
+    padding: 15px;
+  }
+
+  .patient-card-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .patient-status {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+
+  .patient-details {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .study-metrics {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
